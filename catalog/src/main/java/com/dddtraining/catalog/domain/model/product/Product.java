@@ -134,6 +134,10 @@ public class Product implements Serializable{
 		this.name = name2;
 	}
 
+	public Product changeCategory(ProductCategory productCategory){
+		this.setCategory(productCategory);
+		return this;
+	}
 	private void setCategory(ProductCategory categoryId2) {
 		this.category = categoryId2;
 	}
@@ -229,6 +233,10 @@ public class Product implements Serializable{
 	@SuppressWarnings("unused")
 	private void updateResidualQuantity(int aQuantity){
 		this.setResidualQuantity(aQuantity);
+	}
+	
+	public void changeResidualQuantity(int newResidualQuantity){
+		this.setResidualQuantity(newResidualQuantity);
 	}
 
 	public void applyDiscount(Discount discount) {
@@ -337,5 +345,11 @@ public class Product implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public void setImages(String images) {
+		this.images = images;
+	}
+	
+	
 
 }

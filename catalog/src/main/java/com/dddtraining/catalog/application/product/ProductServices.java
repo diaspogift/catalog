@@ -6,6 +6,7 @@ import java.util.Collection;
 import com.dddtraining.catalog.domain.model.product.Brand;
 import com.dddtraining.catalog.domain.model.product.Discount;
 import com.dddtraining.catalog.domain.model.product.Product;
+import com.dddtraining.catalog.domain.model.product.ProductCategory;
 
 
 public interface ProductServices {
@@ -24,5 +25,7 @@ public interface ProductServices {
 	public void updateBrand(String productId, Brand newBrand);
 	public Product getProductById(String id);
 	public Collection<Product> getAllProduct();
+	public Product changeCategory(String productId, ProductCategory category);
+	public void changeResidualQuantity(String id, int newResidualQuantity);
 	
 }

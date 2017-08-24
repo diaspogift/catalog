@@ -2,6 +2,8 @@ package com.dddtraining.catalog.domain.model.product;
 
 import javax.persistence.Embeddable;
 
+import com.dddtraining.catalog.domain.model.category.Category;
+
 
 @Embeddable
 public class ProductCategory {
@@ -19,6 +21,15 @@ public class ProductCategory {
 		this.categoryDescription = categoryDescription;
 		this.categoryImage = categoryImage;
 	}
+	
+	public ProductCategory(Category category){
+		super();
+		this.categoryId = category.getId();
+		this.categoryName = category.getName();
+		this.categoryDescription = category.getDescription();
+		this.categoryImage = category.getImage();
+	}
+	
 	public String getCategoryId() {
 		return categoryId;
 	}
