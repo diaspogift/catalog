@@ -8,7 +8,7 @@ public interface CategoryService {
 	
 	public Category addCategory(Category category);
 	
-	public void removeCategory(String id);
+	public boolean removeCategory(String id);
 	
 	public Category changeName(String id, String newName);
 	

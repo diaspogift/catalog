@@ -36,6 +36,9 @@ public class DdtrainingApplication {
         	result.add((Category) iterator.next());
         }
 		System.out.println("\n\n______________________________________\n\n" + result + "\n\n______________________________________\n\n");
+		
+		Category aCategory = categoryService.getCategoryById("59dffb25-9e3c-42db-82f6-b873e31b4671");
+		System.out.println("\n\n::::::::::::::::\n\n" + aCategory + "\n\n::::::::::::::::::::::::::::::::::::\n\n");
 		*/
 		/*String cat1Id_s = UUID.randomUUID().toString();
 		UUID.fromString(cat1Id_s);
@@ -67,8 +70,10 @@ public class DdtrainingApplication {
 		
 		ProductServices productServices = context.getBean(ProductServices.class);
 		
-		Collection<Product> products = productServices.findProductByKeyOnName("Ciment");
+		Collection<Product> products = productServices.findProductByKeyOnName("Painture a huile email 10l");
 		System.out.println(products);
+		
+		
 		
 		
 	}

@@ -32,13 +32,14 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public void removeCategory(String id) {
+	public boolean removeCategory(String id) {
 		Category category = repo.getCategoryById(id);
 		
 		if(category == null){
-			throw new IllegalArgumentException("Category not found");
+			//throw new IllegalArgumentException("Category not found");
+			return false;
 		}
-		repo.delete(category);
+		return repo.delete(category);
 	}
 
 	@Override

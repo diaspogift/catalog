@@ -11,9 +11,11 @@ public interface CategoryRepository  {
 
 	public Category save(Category category);
 
-	public void delete(Category category);
+	public boolean delete(Category category);
 
 	public Collection<Category> findAll();
+	
+	public String nextCategoryId();
 
 	
 

@@ -2,6 +2,7 @@ package com.dddtraining.catalog.infrastructure;
 
 
 import java.util.Collection;
+import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -146,8 +147,9 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 	}
 
 	@Override
-	public void delete(Category category) {
-		this.session().delete(category);
+	public boolean  delete(Category category) {
+		 this.session().delete(category);
+		 return true;
 		
 	}
 
@@ -157,5 +159,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
 		Query query =  this.session().createQuery("from com.dddtraining.catalog.domain.model.category.Category as _obj_ ");
 
 		return query.list();
+	}
+
+
+
+	@Override
+	public String nextCategoryId() {
+		String id = UUID.randomUUID().toString();
+		UUID uuid = UUID.fromString(id);
+		return uuid.toString().toUpperCase();
 	}
 }

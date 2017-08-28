@@ -28,12 +28,13 @@ public class ProductServiceImpl implements ProductServices{
 	}
 
 	@Override
-	public void delete(String productId) {
+	public boolean delete(String productId) {
 		Product foundProduct = repo.getPtoductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Product not found");
+			//throw new IllegalArgumentException("Product not found");
+			return false;
 		}
-		repo.delete(foundProduct);
+		return repo.delete(foundProduct);
 
 	}
 
@@ -58,65 +59,74 @@ public class ProductServiceImpl implements ProductServices{
 	}
 
 	@Override
-	public void changePrice(String productId, BigDecimal newPrice) {
+	public boolean changePrice(String productId, BigDecimal newPrice) {
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Produit non trouve");
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
 		}
 		
 		foundProduct.changePrice(newPrice);
+		return true;
 
 	}
 
 	@Override
-	public void changeDescription(String productId, String newDescription) {
+	public boolean changeDescription(String productId, String newDescription) {
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Produit non trouve");
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
 		}
 		
 		foundProduct.changeDescription(newDescription);
-
+		return true;
 	}
 
 	@Override
-	public void updateTitle(String productId) {
+	public boolean updateTitle(String productId) {
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Produit non trouve");
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
 		}
 		
 		foundProduct.updateTitle();
+		return true;
 	}
 
 	@Override
-	public void updateImage(String productId, String newImage, int index) {
+	public boolean updateImage(String productId, String newImage, int index) {
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Produit non trouve");
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
 		}
 		
-		foundProduct.updateImage(newImage, index);
+		return foundProduct.updateImage(newImage, index);
 	}
 
 	@Override
-	public void putInPromotion(String productId, Discount discount) {
+	public boolean putInPromotion(String productId, Discount discount) {
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Produit non trouve");
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
 		}
 		
-		foundProduct.applyDiscount(discount);
+		return foundProduct.applyDiscount(discount);
 	}
 
 	@Override
-	public void updateBrand(String productId, Brand newBrand) {
+	public boolean updateBrand(String productId, Brand newBrand) {
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
-			throw new IllegalArgumentException("Produit non trouve");
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
 		}
 		
-		foundProduct.updateBrand(newBrand);
+		 foundProduct.updateBrand(newBrand);
+		 return true;
 
 	}
 
@@ -139,10 +149,12 @@ public class ProductServiceImpl implements ProductServices{
 	}
 
 	@Override
-	public void changeResidualQuantity(String id, int newResidualQuantity) {
+	public Product changeResidualQuantity(String id, int newResidualQuantity) {
 		Product product = repo.getPtoductById(id);
-		product.changeResidualQuantity(newResidualQuantity);
+		if(product == null) return null;
 		
+		product.changeResidualQuantity(newResidualQuantity);
+		return product;
 	}
 
 }

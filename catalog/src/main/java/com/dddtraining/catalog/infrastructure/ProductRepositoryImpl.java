@@ -25,7 +25,7 @@ public class ProductRepositoryImpl implements ProductRepository{
 				
 		Query query = this.session().createQuery(
                 "from com.dddtraining.catalog.domain.model.product.Product as _obj_ "
-                + "where _obj_.id like ?");
+                + "where _obj_.id = ?");
 
         query.setParameter(0, ProductId);
         
@@ -112,8 +112,9 @@ public class ProductRepositoryImpl implements ProductRepository{
 	}
 
 	@Override
-	public void delete(Product foundProduct) {
+	public boolean delete(Product foundProduct) {
 		this.session().delete(foundProduct);
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")

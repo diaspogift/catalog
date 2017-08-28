@@ -12,20 +12,20 @@ import com.dddtraining.catalog.domain.model.product.ProductCategory;
 public interface ProductServices {
 	
 	public Product add(Product product);
-	public void delete(String productId);
+	public boolean delete(String productId);
 	public Collection<Product> findProductByKeyOnName(String keyOnName);
 	public Collection<Product> findProductByKeyOnBrandName(String keyOnBrandName);
 	public Collection<Product> findProductByKeyOnCategoryName(String keyOnCategoryName);
 	public Collection<Product> findProductInPromotion();
-	public void changePrice(String productId, BigDecimal newPrice);
-	public void changeDescription(String productId, String newDescription);
-	public void updateTitle(String productId);
-	public void updateImage(String productId, String newImage, int index);
-	public void putInPromotion(String productId, Discount discount);
-	public void updateBrand(String productId, Brand newBrand);
+	public boolean changePrice(String productId, BigDecimal newPrice);
+	public boolean changeDescription(String productId, String newDescription);
+	public boolean updateTitle(String productId);
+	public boolean updateImage(String productId, String newImage, int index);
+	public boolean putInPromotion(String productId, Discount discount);
+	public boolean updateBrand(String productId, Brand newBrand);
 	public Product getProductById(String id);
 	public Collection<Product> getAllProduct();
 	public Product changeCategory(String productId, ProductCategory category);
-	public void changeResidualQuantity(String id, int newResidualQuantity);
+	public Product changeResidualQuantity(String id, int newResidualQuantity);
 	
 }

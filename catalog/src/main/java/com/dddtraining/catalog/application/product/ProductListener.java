@@ -28,7 +28,7 @@ public class ProductListener {
 	@Autowired
 	private CategoryService categoryService;
 	
-	@JmsListener(destination="CATALOG_PRODUCT_CREATED_QUEUE")
+	@JmsListener(destination="_CATALOG_PRODUCT_CREATED_QUEUE")
 	public void proccessProductCreatedMessage(String incomingMessage) throws JSONException{
 		/*Category category = getDefaultCategory();		
 		String productId = incomingMessage.get("productId");
@@ -45,7 +45,7 @@ public class ProductListener {
 		productServices.add(product);	
 	}
 	
-	@JmsListener(destination="CATALOG_PRODUCT_RESIDUAL_QUANTITY_CHANGED_QUEUE")
+	@JmsListener(destination="_CATALOG_PRODUCT_RESIDUAL_QUANTITY_CHANGED_QUEUE")
 	public void proccessResidualQuantityChangeMessage(String incomingMessage) throws JSONException{
 		/*String productId = incomingMessage.get("productId");
 		int quantity = Integer.parseInt(incomingMessage.get("quantity"));*/

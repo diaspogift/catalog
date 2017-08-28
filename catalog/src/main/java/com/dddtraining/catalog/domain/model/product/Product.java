@@ -239,10 +239,11 @@ public class Product implements Serializable{
 		this.setResidualQuantity(newResidualQuantity);
 	}
 
-	public void applyDiscount(Discount discount) {
+	public boolean applyDiscount(Discount discount) {
 		this.discount = discount;
 		setPromotionPrice(this.discount.apply(this));
 		this.inPromotion = (this.price.compareTo(promotionPrice) == 1);
+		return true;
 	}
 
 
@@ -264,18 +265,19 @@ public class Product implements Serializable{
 		this.setTitle(titre);
 	}
 
-	public void updateImage(String image, int index){
+	public boolean updateImage(String image, int index){
 		
 		JSONArray jsonArray = null;
 		try {
 			jsonArray = new  JSONArray(this.images);
 		} catch (JSONException e1) {
-			e1.printStackTrace();
+			return false;
 		}
 		
 		int imagesSize = jsonArray.length();
 		if(image.trim().equals("")){
-			throw new IllegalArgumentException("");
+			//throw new IllegalArgumentException("");
+			return false;
 		}
 		if(index < 0 || index >= imagesSize){
 			index = Math.round(Math.abs(index))%imagesSize;
@@ -287,8 +289,9 @@ public class Product implements Serializable{
 			jsonObject.put("" + index, image);
 			
 		} catch (JSONException e) {
-			e.printStackTrace();
+			return false;
 		}
+		return true;
 		
 		//this.images.get(index).replace(this.images.get(index), image.trim());
 		
