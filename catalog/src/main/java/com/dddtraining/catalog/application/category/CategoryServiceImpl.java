@@ -85,4 +85,9 @@ public class CategoryServiceImpl implements CategoryService {
 		return repo.findAll();
 	}
 
+	@Override
+	public boolean removeAll() {
+		return repo.removeAll();
+	}
+
 }

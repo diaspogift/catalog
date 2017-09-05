@@ -6,7 +6,7 @@
 
 ---------update category--------------
 
-'{"serialVersionUID":1, "nativeId":0, "id":"9e4e3e1a-76df-43e9-8b11-8d5719295344", "category":{"categoryId":"90277E0C-1C6A-4398-A23F-697406B76CEF", "categoryName":"Rest Test New Name1", "categoryDescription":"Rest Test Description1", "categoryImage":"/home/nkalla/Téléchargements/training.png"}, "name":"", "description":"", "title":{"title":""}, "images":"", "residualQuantity":0, "brand":{"name":"", "logo":""}, "price": 0,"promotionPrice":0, "inPromotion": 0,"discount": {}, "rating":{"ratingTotal": 5, "ratingCount": 5}, "strategy":0, "reduction":0, "percentage":0}'  
+'{"serialVersionUID":1, "nativeId":0, "id":"9e4e3e1a-76df-43e9-8b11-8d5719295344", "category":{"categoryId":"90277E0C-1C6A-4398-A23F-697406B76CEF", "categoryName":"Rest Test New Name1", "categoryDescription":"Rest Test Description1", "categoryImage":"/home/nkalla/Téléchargements/training.png"}, "name":"", "description":"", "title":{"title":""}, "images":"", "residualQuantity":0, "brand":{"name":"", "logo":""}, "price": 0,"promotionPrice":0, "inPromotion": 0, "promotion":{"lifeSpan":{"endDate":"", "startDate":"},"strategy":2}, "rating":{"ratingTotal": 5, "ratingCount": 5}}'
                                                           {"id":"90277E0C-1C6A-4398-A23F-697406B76CEF","name":"Rest Test New Name1", "description":"Rest Test Description1", "image":"/home/nkalla/Téléchargements/training.png"}
 
  
@@ -24,6 +24,16 @@ curl -H "Content-Type: application/json" -X PUT -d '{"serialVersionUID":1, "nati
  
  curl  -X GET  localhost:8082/catalog/product/name?query=Painture a huile email 10l
  
+
+
+
+ ----------------------------------------------------------------------------------------
+
+
+
+ curl -H "Content-Type: application/json" -X PUT -d '{"serialVersionUID":1, "nativeId":0, "id":"0c0fb675-0d5a-4e76-a800-16f189fdcfb7", "category":{"categoryId":"90277E0C-1C6A-4398-A23F-697406B76CEF", "categoryName":"Rest Test New Name1", "categoryDescription":"Rest Test Description1", "categoryImage":"/home/nkalla/Téléchargements/training.png"}, "name":"", "description":"", "title":{"title":""}, "images":"", "residualQuantity":0, "brand":{"name":"", "logo":""}, "price": 0,"promotionPrice":0, "inPromotion": 0, "promotion":{"lifeSpan":{"endDate":"", "startDate":""},"strategy":2}, "rating":{"ratingTotal": 5, "ratingCount": 5}}' localhost:8082/catalog/product/name
+
+ curl -H "Content-Type: application/json" -X PUT -d '{"serialVersionUID":1, "nativeId":0, "id":"0c0fb675-0d5a-4e76-a800-16f189fdcfb7", "category":{"categoryId":"90277E0C-1C6A-4398-A23F-697406B76CEF", "categoryName":"Rest Test New Name1", "categoryDescription":"Rest Test Description1", "categoryImage":"/home/nkalla/Téléchargements/training.png"}, "name":"", "description":"", "title":{"title":""}, "images":"[{\"0\":\"/home/nkalla/img/dddtraining/product/visual1.png\"},{\"1\":\"/home/nkalla/img/dddtraining/product/visual2.png\"},{\"2\":\"/home/nkalla/img/dddtraining/product/visual3.png\"},{\"3\":\"/home/nkalla/img/dddtraining/product/visual4.png\"},{\"4\":\"/home/nkalla/img/dddtraining/product/visual5.png\"}]", "residualQuantity":0, "brand":{"name":"", "logo":""}, "price": 4200,"promotionPrice":0, "inPromotion": 0, "promotion":{"lifeSpan":{"endDate":"", "startDate":""},"strategy":2}, "rating":{"ratingTotal": 5, "ratingCount": 5}}' localhost:8082/catalog/product/images
  
  
  
@@ -36,9 +46,7 @@ curl -H "Content-Type: application/json" -X PUT -d '{"serialVersionUID":1, "nati
  
  
  
- 
- 
- 
+ [{"0":"/home/nkalla/img/dddtraining/product/visual1.png"},{"1":"/home/nkalla/img/dddtraining/product/visual2.png"},{"2":"/home/nkalla/img/dddtraining/product/visual3.png"},{"3":"/home/nkalla/img/dddtraining/product/visual4.png"},{"4":"/home/nkalla/img/dddtraining/product/visual5.png"}]
  
  
  

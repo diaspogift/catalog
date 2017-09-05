@@ -2,17 +2,14 @@ package com.dddtraining.catalog.application.product;
 
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
+import com.dddtraining.catalog.domain.model.product.*;
+import com.dddtraining.catalog.domain.model.product.event.ProductPromotedRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.dddtraining.catalog.domain.model.product.Brand;
-import com.dddtraining.catalog.domain.model.product.Discount;
-import com.dddtraining.catalog.domain.model.product.Product;
-import com.dddtraining.catalog.domain.model.product.ProductCategory;
-import com.dddtraining.catalog.domain.model.product.ProductRepository;
 
 @Service
 @Transactional
@@ -21,6 +18,10 @@ public class ProductServiceImpl implements ProductServices{
 
 	@Autowired
 	private ProductRepository repo;
+
+	@Autowired
+	private ProductPromotedRepository productPromotedRepository;
+
 	
 	@Override
 	public Product add(Product product) {
@@ -107,14 +108,38 @@ public class ProductServiceImpl implements ProductServices{
 	}
 
 	@Override
-	public boolean putInPromotion(String productId, Discount discount) {
+	public boolean changeImage(String productId, List<String> newImage) {
+		Product foundProduct = repo.findProductById(productId);
+		if(foundProduct == null){
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
+		}
+
+
+		return foundProduct.changeImages(newImage);
+	}
+
+	@Override
+	public boolean putInPromotion(String productId, Promotion promotion) {
+		//System.out.println("\n\n\nDiscount: " + discount + "\n\n\n");
 		Product foundProduct = repo.findProductById(productId);
 		if(foundProduct == null){
 			//throw new IllegalArgumentException("Produit non trouve");
 			return false;
 		}
 		
-		return foundProduct.applyDiscount(discount);
+		return foundProduct.putInPromotion(promotion);
+	}
+
+	@Override
+	public boolean removePromotion(String productId) {
+		Product foundProduct = repo.findProductById(productId);
+		if(foundProduct == null){
+			//throw new IllegalArgumentException("Produit non trouve");
+			return false;
+		}
+
+		return foundProduct.removePromotion();
 	}
 
 	@Override
@@ -156,5 +181,16 @@ public class ProductServiceImpl implements ProductServices{
 		product.changeResidualQuantity(newResidualQuantity);
 		return product;
 	}
+
+	@Override
+	public Collection<Product> searchProduct(String categoryName, String name) {
+		return repo.searchProduct(categoryName, name);
+	}
+
+	@Override
+	public void removeAll() {
+		repo.removeAll();
+	}
+
 
 }

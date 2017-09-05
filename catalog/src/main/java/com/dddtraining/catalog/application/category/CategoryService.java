@@ -19,5 +19,7 @@ public interface CategoryService {
 	public Category getCategoryById(String id);
 	
 	public Collection<Category> getAllCategory();
+
+	public boolean removeAll();
 	
 }

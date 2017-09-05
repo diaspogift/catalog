@@ -2,8 +2,7 @@ package com.dddtraining.catalog;
 
 
 
-import javax.jms.JMSException;
-
+import com.dddtraining.catalog.application.category.CategoryService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.SpringApplication;
@@ -14,28 +13,25 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.dddtraining.catalog.application.category.CategoryService;
-import com.dddtraining.catalog.application.product.ProductServices;
-
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Configuration
 @ComponentScan
 @EnableAutoConfiguration
-public class SaveProductTest {
+public class ProductTest {
 	
 	@Test
 	public void createProductAndSave() {
-		//ConfigurableApplicationContext context = SpringApplication.run(SaveProductTest.class);
+		ConfigurableApplicationContext context = SpringApplication.run(ProductTest.class);
 		
-		//CategoryService categoryService = context.getBean(CategoryService.class);
+		CategoryService categoryService = context.getBean(CategoryService.class);
 		
 		/*String cat1Id_s = UUID.randomUUID().toString();
 		UUID.fromString(cat1Id_s);
-		
+
 		Category cat1 = new Category(cat1Id_s, "Painture", "Tout pour les embellissement", "/home/diapogift/img/catalog/category/painture.png");
-		
+
 		categoryService.addCategory(cat1);
 		
 		Category extractedCategory = categoryService.getCategoryById(cat1Id_s);
@@ -87,20 +83,17 @@ public class SaveProductTest {
 		int sizep = products.size();
 		System.out.println(prodIds);
 		assertEquals(3, sizep);*/
-		
-		
-		
 	}
 	
-	@Test
+	/*@Test
 	public void listenToNewProduct() throws InterruptedException, JMSException {
-		ConfigurableApplicationContext context = SpringApplication.run(SaveProductTest.class);
+		ConfigurableApplicationContext context = SpringApplication.run(ProductTest.class);
 		ProductServices productServices = context.getBean(ProductServices.class);
 		CategoryService categoryService = context.getBean(CategoryService.class);
 		
 		Consumer consumer = new Consumer(categoryService, productServices);
 		consumer.consume();
 		
-	}
+	}*/
 
 }

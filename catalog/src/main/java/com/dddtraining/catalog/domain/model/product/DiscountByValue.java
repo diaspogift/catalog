@@ -17,10 +17,12 @@ public class DiscountByValue implements Discount {
 
 	@Override
 	public BigDecimal apply(Product product) {
-		if(delta.compareTo(new BigDecimal(0)) == -1 || delta.compareTo(product.getPrice()) == 1)
-			throw new IllegalArgumentException("Invalid Discount");
-		double rest = product.getPrice().doubleValue() - delta.doubleValue();
-		return new BigDecimal(rest);
+		if(delta.compareTo(new BigDecimal(0)) == -1 || delta.compareTo(product.getPrice()) == 1){
+            throw new IllegalArgumentException("Invalid Discount");
+        }
+        product.getPromotion().setStrategy(STRATEGY.ONE);
+		double reste = product.getPrice().doubleValue() - delta.doubleValue();
+		return new BigDecimal(reste);
 	}
 
 }

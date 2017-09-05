@@ -2,10 +2,7 @@ package com.dddtraining.catalog.domain.model.category;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 @Entity 
@@ -19,6 +16,7 @@ public class Category implements Serializable{
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer     nativeId;
 
+	@Column(unique=true)
 	private String      id;
 	private String      name;
 	private String      description;

@@ -2,15 +2,15 @@ package com.dddtraining.catalog.domain.model.product;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.*;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import com.dddtraining.catalog.domain.model.DomainRegistry;
+import com.dddtraining.catalog.domain.model.product.event.DomainEventPublisher;
+import com.dddtraining.catalog.domain.model.product.event.DomainEventSubscriber;
+import com.dddtraining.catalog.domain.model.product.event.ProductPromoted;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +25,8 @@ public class Product implements Serializable{
 	@Id
     @GeneratedValue(strategy=GenerationType.AUTO)
 	private Integer nativeId;
-	
+
+	@Column(unique=true)
 	private String id;
 	
 	@Embedded
@@ -38,8 +39,8 @@ public class Product implements Serializable{
 	@Embedded
 	private Title title;
 	
-	@Column(length = 5000)
-	private String images;
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> images;
 	
 	private int residualQuantity;
 	
@@ -47,15 +48,16 @@ public class Product implements Serializable{
 	private Brand brand;
 	
 	private BigDecimal price;
-	
-	private BigDecimal promotionPrice;
-	
 
-	@SuppressWarnings("unused")
-	private boolean inPromotion;
-	
-	@Embedded
-	private Discount discount;
+
+    private BigDecimal promotionPrice;
+
+
+    @SuppressWarnings("unused")
+    private boolean inPromotion;
+
+    @Embedded
+    private  Promotion promotion;
 	
 	@Embedded
 	private Rating rating;
@@ -66,7 +68,6 @@ public class Product implements Serializable{
 	public Product(String id, Category category, String name, String description, Title title, List<String> images,
 			int residualQuantity, Brand brand, BigDecimal price) {
 		super();
-		discount = new DefaultDiscount();
 		this.setId(id);
 		this.setCategory(new ProductCategory(category.getId(), category.getName(), category.getDescription(), category.getImage()));
 		this.setName(name);
@@ -76,8 +77,9 @@ public class Product implements Serializable{
 		this.setBrand(brand);
 		this.updateTitle();
 		this.setPrice(price);
+		this.setPromotionPrice(null);
 		this.setInPromotion(false);
-		this.setPromotionPrice(discount.apply(this));
+		this.setPromotion(null);
 		this.rating = new Rating(5, 0);
 	}
 	
@@ -87,21 +89,19 @@ public class Product implements Serializable{
 	 * 
 	 * Setters
 	 */
-	
-	
-	private void setPromotionPrice(BigDecimal promotionPrice2) {
-		this.promotionPrice = promotionPrice2;
+
+	private void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
 	}
 
 	private void setInPromotion(boolean inPromotion2) {
 		this.inPromotion = inPromotion2;
 	}
-	
+
+
 	public boolean isInPromotion() {
-		return (this.price.compareTo(promotionPrice) == 1);//this.inPromotion;
+		return inPromotion;
 	}
-	
-	
 
 	private void setBrand(Brand brand2) {
 		this.brand = brand2;
@@ -112,18 +112,7 @@ public class Product implements Serializable{
 	}
 
 	private void setImages(List<String> images2) {
-		JSONArray jsonArray = new JSONArray();
-		
-		for(int i = 0; i<images2.size(); i++){
-			JSONObject jsonObject = new JSONObject();
-			try {
-				jsonObject.put("" + i, images2.get(i));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			jsonArray.put(jsonObject);
-		}
-		this.images = jsonArray.toString();
+		this.images = images2;
 	}
 
 	private void setDescription(String description2) {
@@ -153,11 +142,15 @@ public class Product implements Serializable{
 	private void setTitle(Title title) {
 		this.title = title;
 	}
+
+    private void setPromotionPrice(BigDecimal promotionPrice){
+        this.promotionPrice = promotionPrice;
+    }
 	
 	@SuppressWarnings("unused")
-	private void setDiscount(Discount discount) {
+	/*private void setDiscount(Discount discount) {
 		this.discount = discount;
-	}
+	}*/
 
 	public void setRating(Rating rating) {
 		this.rating = rating;
@@ -175,13 +168,6 @@ public class Product implements Serializable{
 		return title;
 	}
 
-	public BigDecimal getPromotionPrice() {
-		return promotionPrice;
-	}
-	
-	public Discount getDiscount() {
-		return discount;
-	}
 
 	public String getId() {
 		return id;
@@ -207,7 +193,7 @@ public class Product implements Serializable{
 
 
 
-	public String getImages() {
+	public List<String> getImages() {
 		return images;
 	}
 
@@ -229,6 +215,9 @@ public class Product implements Serializable{
 		return rating;
 	}
 
+    /*public BigDecimal getPromotionPrice() {
+        return promotionPrice;
+    }*/
 	
 	@SuppressWarnings("unused")
 	private void updateResidualQuantity(int aQuantity){
@@ -237,13 +226,6 @@ public class Product implements Serializable{
 	
 	public void changeResidualQuantity(int newResidualQuantity){
 		this.setResidualQuantity(newResidualQuantity);
-	}
-
-	public boolean applyDiscount(Discount discount) {
-		this.discount = discount;
-		setPromotionPrice(this.discount.apply(this));
-		this.inPromotion = (this.price.compareTo(promotionPrice) == 1);
-		return true;
 	}
 
 
@@ -266,75 +248,19 @@ public class Product implements Serializable{
 	}
 
 	public boolean updateImage(String image, int index){
-		
-		JSONArray jsonArray = null;
-		try {
-			jsonArray = new  JSONArray(this.images);
-		} catch (JSONException e1) {
+		if(index < 0 || index >= images.size()){
 			return false;
 		}
-		
-		int imagesSize = jsonArray.length();
-		if(image.trim().equals("")){
-			//throw new IllegalArgumentException("");
-			return false;
-		}
-		if(index < 0 || index >= imagesSize){
-			index = Math.round(Math.abs(index))%imagesSize;
-		}
-		
-		JSONObject jsonObject;
-		try {
-			jsonObject = jsonArray.getJSONObject(index);
-			jsonObject.put("" + index, image);
-			
-		} catch (JSONException e) {
-			return false;
-		}
+
+		this.getImages().set(index, image);
+
 		return true;
-		
-		//this.images.get(index).replace(this.images.get(index), image.trim());
-		
 	}
 	
 	public void updateBrand(Brand newBrand) {
 		this.setBrand(newBrand);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Product other = (Product) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
-
-
-
-	@Override
-	public String toString() {
-		return "\n\nProduct [id=" + id + ", categoryId=" + category + ", name=" + name + ", description=" + description
-				+ ", title=" + title + ", residualQuantity=" + residualQuantity + ", brand=" + brand + "]\n\n";
-	}
 
 	public long getNativeId() {
 		return nativeId;
@@ -349,10 +275,77 @@ public class Product implements Serializable{
 		return serialVersionUID;
 	}
 
-	public void setImages(String images) {
-		this.images = images;
-	}
-	
-	
 
+
+
+    public boolean putInPromotion(Promotion promotion) {
+        if (promotion == null){
+            return  false;
+        }
+        if (promotion.inCourse()){
+            this.setPromotion(promotion);
+            this.setInPromotion(true);
+            this.setPromotionPrice(promotion.getDiscount().apply(this));
+            DomainEventPublisher.instance().publish(new ProductPromoted(this.id,this.price, this.promotionPrice, promotion));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removePromotion() {
+	    this.promotion = null;
+        this.setInPromotion(false);
+        this.setPromotionPrice(null);
+	    return true;
+    }
+
+    public BigDecimal getPromotionPrice(){
+        return this.promotionPrice;
+    }
+
+    public Promotion getPromotion() {
+        return promotion;
+    }
+
+    public boolean changeImages(List<String> newImages) {
+        this.setImages(newImages);
+        return true;
+    }
+
+
+    @Override
+    public String toString() {
+        return "\n\nProduct{" +
+                "\nnativeId=" + nativeId +
+                ", \nid='" + id + '\'' +
+                ", \ncategory=" + category +
+                ", \nname='" + name + '\'' +
+                ", \ndescription='" + description + '\'' +
+                ", \ntitle=" + title +
+                ", \nimages='" + images + '\'' +
+                ", \nresidualQuantity=" + residualQuantity +
+                ", \nbrand=" + brand +
+                ", \nprice=" + price +
+                ", \npromotionPrice=" + promotionPrice +
+                ", \ninPromotion=" + inPromotion +
+                ", \npromotion=" + promotion +
+                ", \nrating=" + rating +
+                '}';
+    }
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Product product = (Product) o;
+
+		return id.equals(product.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
 }

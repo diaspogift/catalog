@@ -13,6 +13,7 @@ public class Title {
 		this.setTitle(args);
 	}
 	private void setTitle(String[] args) {
+
 		String tmpTitle = "";
 		for(int i = 0 ; i<args.length; i++){
 			if(i == 0){

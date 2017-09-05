@@ -80,6 +80,26 @@ public class ProductRepositoryImpl implements ProductRepository{
         return query.list();
 	}
 
+	@Override
+	public Collection<Product> searchProduct(String categoryName, String name) {
+
+		//System.out.println("\n\n\n\ncategory: " + categoryName + "\nname: " + name+ "\n\n\n");
+		Query query = this.session().createQuery(
+				"from com.dddtraining.catalog.domain.model.product.Product as _obj_ "
+						+ "where (LCASE(_obj_.category.categoryName) like ? or LCASE(_obj_.category.categoryDescription) like ? ) and "+
+		" (LCASE(_obj_.name) like ? or LCASE(_obj_.brand.name) like ? or LCASE(_obj_.description) like ? or LCASE(_obj_.title.title) like ?)");
+
+		query.setParameter(0, "%" + categoryName.trim().toLowerCase() + "%");
+		query.setParameter(1, "%" + categoryName.trim().toLowerCase() + "%");
+
+		query.setParameter(2, "%" + name.trim().toLowerCase() + "%");
+		query.setParameter(3, "%" + name.trim().toLowerCase() + "%");
+		query.setParameter(4, "%" + name.trim().toLowerCase() + "%");
+		query.setParameter(5, "%" + name.trim().toLowerCase() + "%");
+
+		return query.list();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<Product> findProductInPromotion() {
@@ -97,6 +117,7 @@ public class ProductRepositoryImpl implements ProductRepository{
                 + "where _obj_.id = ?");
 
         query.setParameter(0, id);
+
         @SuppressWarnings("unchecked")
 		Collection<Product> foundProducts = query.list();
         if(foundProducts.size() != 1) return null;
@@ -123,5 +144,16 @@ public class ProductRepositoryImpl implements ProductRepository{
 		Query query =  this.session().createQuery("from com.dddtraining.catalog.domain.model.product.Product as _obj_ ");
 
 		return query.list();
+	}
+
+	@Override
+	public void removeAll() {
+
+		Query query0 =  this.session().createSQLQuery("delete from product_images where 1");
+		query0.executeUpdate();
+
+		Query query =  this.session().createQuery("delete from com.dddtraining.catalog.domain.model.product.Product");
+		query.executeUpdate();
+		return;
 	}
 }

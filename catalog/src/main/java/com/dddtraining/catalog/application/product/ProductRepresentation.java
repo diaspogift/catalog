@@ -1,13 +1,10 @@
 package com.dddtraining.catalog.application.product;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 
-
-import com.dddtraining.catalog.domain.model.product.Brand;
-import com.dddtraining.catalog.domain.model.product.ProductCategory;
-import com.dddtraining.catalog.domain.model.product.Rating;
-import com.dddtraining.catalog.domain.model.product.Title;
+import com.dddtraining.catalog.domain.model.product.*;
 
 public class ProductRepresentation {
 	
@@ -25,7 +22,7 @@ public class ProductRepresentation {
 
 	private Title title;
 
-	private String images;
+	private List<String> images;
 	
 	private int residualQuantity;
 
@@ -33,17 +30,12 @@ public class ProductRepresentation {
 	
 	private BigDecimal price;
 	
-	private BigDecimal promotionPrice;
+	private Promotion promotion;
 	
 	private boolean inPromotion;
+	private BigDecimal promotionPrice;
 		
 	private Rating rating;
-	
-	private int strategy;
-	
-	private BigDecimal reduction;
-	
-	private Float percentage;
 	
 	
 	public ProductRepresentation(){
@@ -51,30 +43,32 @@ public class ProductRepresentation {
 	}
 
 
-	public ProductRepresentation(Integer nativeId, String id, ProductCategory category, String name, String description,
-			Title title, String images, int residualQuantity, Brand brand, BigDecimal price, BigDecimal promotionPrice,
-			boolean inPromotion, Rating rating, int strategy, BigDecimal reduction, Float percentage) {
-		super();
-		this.nativeId = nativeId;
-		this.id = id;
-		this.category = category;
-		this.name = name;
-		this.description = description;
-		this.title = title;
-		this.images = images;
-		this.residualQuantity = residualQuantity;
-		this.brand = brand;
-		this.price = price;
-		this.promotionPrice = promotionPrice;
-		this.inPromotion = inPromotion;
-		this.rating = rating;
-		this.strategy = strategy;
-		this.reduction = reduction;
-		this.percentage = percentage;
-	}
+    public ProductRepresentation(Integer nativeId, String id, ProductCategory category, String name, String description, Title title, List<String> images, int residualQuantity, Brand brand, BigDecimal price, Promotion promotion, boolean inPromotion, BigDecimal promotionPrice, Rating rating) {
+        this.nativeId = nativeId;
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.description = description;
+        this.title = title;
+        this.images = images;
+        this.residualQuantity = residualQuantity;
+        this.brand = brand;
+        this.price = price;
+        this.promotion = promotion;
+        this.inPromotion = inPromotion;
+        this.promotionPrice = promotionPrice;
+        this.rating = rating;
+    }
 
+    public BigDecimal getPromotionPrice() {
+        return promotionPrice;
+    }
 
-	public Integer getNativeId() {
+    public void setPromotionPrice(BigDecimal promotionPrice) {
+        this.promotionPrice = promotionPrice;
+    }
+
+    public Integer getNativeId() {
 		return nativeId;
 	}
 
@@ -134,12 +128,12 @@ public class ProductRepresentation {
 	}
 
 
-	public String getImages() {
+	public List<String> getImages() {
 		return images;
 	}
 
 
-	public void setImages(String images) {
+	public void setImages(List<String> images) {
 		this.images = images;
 	}
 
@@ -174,13 +168,13 @@ public class ProductRepresentation {
 	}
 
 
-	public BigDecimal getPromotionPrice() {
-		return promotionPrice;
+	public Promotion getPromotion() {
+		return promotion;
 	}
 
 
-	public void setPromotionPrice(BigDecimal promotionPrice) {
-		this.promotionPrice = promotionPrice;
+	public void setPromotion(Promotion promotion) {
+		this.promotion = promotion;
 	}
 
 
@@ -204,42 +198,14 @@ public class ProductRepresentation {
 	}
 
 
-	public int getStrategy() {
-		return strategy;
-	}
-
-
-	public void setStrategy(int strategy) {
-		this.strategy = strategy;
-	}
-
-
-	public BigDecimal getReduction() {
-		return reduction;
-	}
-
-
-	public void setReduction(BigDecimal reduction) {
-		this.reduction = reduction;
-	}
-
-
-	public Float getPercentage() {
-		return percentage;
-	}
-
-
-	public void setPercentage(Float percentage) {
-		this.percentage = percentage;
-	}
-
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
-	
-	
-	
+
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+
 }

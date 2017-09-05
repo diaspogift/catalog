@@ -17,7 +17,7 @@ public interface CategoryRepository  {
 	
 	public String nextCategoryId();
 
-	
 
+    boolean removeAll();
 }
 

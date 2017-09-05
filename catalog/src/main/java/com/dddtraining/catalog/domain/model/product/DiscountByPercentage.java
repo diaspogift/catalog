@@ -20,12 +20,14 @@ public class DiscountByPercentage implements Discount {
 
 	@Override
 	public BigDecimal apply(Product product) {
-		if(percentage < 0 || percentage > 100){
+		if(percentage < 0 || percentage > 100 ){
 			throw new IllegalArgumentException("Invalid Percentage");
 		}
-		
-		double newPrice = product.getPrice().doubleValue()*(1-percentage/100); 
+		product.getPromotion().setStrategy(STRATEGY.TWO);
+		double newPrice = product.getPrice().doubleValue()*(1d-percentage/100);
 		return new BigDecimal(newPrice);
 	}
+
+
 
 }
